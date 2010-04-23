@@ -1,6 +1,0 @@
-AdminList=["Cam", "Sobber"]
-OpList=["Cam"]
-SpanishWords=["hola","estupido/a"]
-EnglishWords=["hi","dumb"]
-banned_eval=["shutdown","popen","s.","close","banned_eval","AdminList","OpList","append","remove","quit", "import", "exec", "exit", "kill", "getattr", "decode*", "encode*", "eval*", "isend", "builtins", "__builtins__", "open", "__import__", "import", "locals()"]
-swearWords=["fuck","shit","crap","gay","fag","nigger","nigga"]
