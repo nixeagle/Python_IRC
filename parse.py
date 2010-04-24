@@ -46,9 +46,14 @@ class Parse(object):
 			elif self.CMD==".unban":self.op_cmds.Ban("unban")
 			elif self.CMD==".ud":self.web.UD()
 			elif self.CMD==".dict":self.web.Dict()
+			elif self.CMD==".pyv":self.mod_cmds.PyEvaluator()
+			elif self.CMD==".rx":self.mod_cmds.Regex()
 			elif "=+~" in self.args[3]:self.op_cmds.ReturnUserHost()
-			elif self.CMD[0]=="~":self.mod_cmds.Action()
 			elif self.CMD==".git" or self.CMD==".source":self.iSend("My source code is: http://github.com/Cam1337/Python_IRC")
+			try:
+				if self.CMD[0]=="~":self.mod_cmds.Action()
+			except IndexError, e:
+				pass
 			
 	#iSend function	
 	def iSend(self, msg):

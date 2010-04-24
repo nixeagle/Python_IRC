@@ -4,6 +4,7 @@ import time
 import string
 import socket
 import config
+import re
 
 class Commands(object):
 	def __init__(self, Nick, Location, TotalString, CMD, line, args, s, iSend):
@@ -21,7 +22,7 @@ class Commands(object):
 			self.Location=self.Nick
 		self.iSend=iSend
 	def List(self):
-		x="OpList: %s" % IRCLISTS.OpList
+		x="OpList: %s" % config.OpList
 		self.iSend(x)
 		
 	def LookUp(self):
@@ -58,13 +59,41 @@ class Commands(object):
 			LeetSpeekText=LeetSpeekText.replace("t","7")
 			self.iSend(LeetSpeekText)
 	def Action(self):
-		if self.Nick in config.OpList:
+		if self.Nick in config.OpList or self.Nick=="Curtis":
 			if len(self.args)>=5:
 				if "|" not in self.args:
 					a=" ".join(self.args[3:len(self.args)-1])[2:]
 					self.s.send("PRIVMSG %s :\x01ACTION %ss %s\x01\r\n" % (self.Location, a, self.args[len(self.args)-1]))
 				else:
 					wt=self.args.index("|")
-					a=" ".join(self.args[3:wt-1])[2:]
-					wth=" ".join(self.args[wt+1:])
-					self.s.send("PRIVMSG %s :\x01ACTION %ss %s (with %s)\x01\r\n" % (self.Location, a, self.args[wt-1], wth))
+					if len(self.args[2:wt]) == 2:
+						a=" ".join(self.args[3:wt])[2:]
+						self.s.send("PRIVMSG %s :\x01ACTION %ss with %s \x01\r\n" % (self.Location, a, self.args[wt+1]))
+					else:
+						a=" ".join(self.args[3:wt-1])[2:]
+						self.s.send("PRIVMSG %s :\x01ACTION %ss %s (with %s)\x01\r\n" % (self.Location, a, self.args[wt-1], " ".join(self.args[wt+1:])))
+			else:
+				a=(self.args[3])[2:]
+				self.s.send("PRIVMSG %s :\x01ACTION %ss \x01\r\n" % (self.Location, a))
+				
+	def PyEvaluator(self):
+		if self.Nick=="Cam":
+			if len(self.args)>=5:
+				a=" ".join(self.args[4:])
+				if a in config.Banned_Eval:
+					self.iSend("Error: Item in string caused error")	
+				else:
+					try:
+						sa=eval(a)
+						self.iSend("%s" % sa)
+					except (AttributeError, SyntaxError, IndexError, NameError, ArithmeticError), e:
+						self.iSend("Error: %s" % e)
+
+	def Regex(self):
+		if self.Nick=="Cam":
+			if len(self.args)>=5:
+				a=" ".join(self.args[4:])
+				try:
+					p = re.compile(a, re.IGNORECASE)
+				except (sre_constants.error), e:
+					pass

@@ -3,6 +3,7 @@ import socket
 import time
 import string
 import socket
+import config
 
 class Spanish(object):
 	def __init__(self, Nick, Location, TotalString, CMD, line, args, s, iSend):
@@ -22,7 +23,7 @@ class Spanish(object):
 	def Conjugate(self):
 		Languages=["spanish"]
 		Tenses=["present"]
-		if len(self.args)==7 and self.Nick in IRCLISTS.OpList:
+		if len(self.args)==7 and self.Nick in config.OpList:
 			Verb=self.args[4].lower()
 			VerbBase=Verb[:len(Verb)-2]
 			VerbEnding=Verb[len(Verb)-2:]
