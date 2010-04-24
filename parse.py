@@ -45,10 +45,9 @@ class Parse(object):
 			elif self.CMD=="+part":self.chan_cmds.ChannelJP("part")
 			elif self.CMD=="+ban":self.op_cmds.Ban("ban")
 			elif self.CMD=="+unban":self.op_cmds.Ban("unban")
-			elif self.CMD=="+userhost":self.op_cmds.UserHost()
 			elif self.CMD=="+ud":self.web.UD()
 			elif self.CMD=="+dict":self.web.Dict()
-			if "=+~" in self.args[3]:self.op_cmds.UserHost2()
+			if "=+~" in self.args[3]:self.op_cmds.ReturnUserHost()
 			
 	#iSend function	
 	def iSend(self, msg):

@@ -38,18 +38,21 @@ class OpCommands(object):
 		self.s.send("MODE %s %s %s%s" % (self.Location, Mode, User, self.rn))
 	def cmdKick(self, User, kmsg):
 		self.s.send("KICK %s %s :%s%s" % (self.Location, User, kmsg, self.rn))
+	def cmdBan(self, User, Mode):
+		self.s.send("MODE %s %s *!*%s%s" % (BanLocation, str(Mode), User, self.rn))
+
 	def Ban(self, su):
+		global BanLocation
+		BanLocation=self.Location
 		if self.Nick in IRCLISTS.OpList:
 			if su=="ban":
 				if len(self.args)>5:
-					kmsg=" ".join(self.args[5:])
-					self.cmdChanMode(self.args[4], "+b")
+					self.uHost(self.args[4], "+b")
 				if len(self.args)==5:
-					kmsg="You have been banned from %s" % self.Location
-					self.cmdChanMode(self.args[4], "+b")
+					self.uHost(self.args[4], "+b")
 			if su=="unban":
 				if len(self.args)==5:
-					self.cmdChanMode(self.args[4], "-b")
+					self.uHost(self.args[4], "-b")
 	def Kick(self):
 		if len(self.args)>5:
 			if self.Nick in IRCLISTS.OpList:
@@ -58,18 +61,12 @@ class OpCommands(object):
 			if self.Nick in IRCLISTS.OpList:
 				KickMSG="You have been kicked from %s." % self.Location
 				self.cmdKick(self.args[4], KickMSG)
-	def UserHost(self):
-		if len(self.args)==5:
-			self.UserHostWho=self.args[4]
-			global UserHostLocation
-			UserHostLocation=self.Location
-			self.s.send("USERHOST %s\r\n" % self.UserHostWho)
-	def UserHost2(self):
-			try:
-				self.s.send("PRIVMSG %s :%s\r\n" % (UserHostLocation, self.args[3]))
-				print self.args[3].split("@")[1]
-			except AttributeError:
-				print "Attribute ERROR"
-			
-			
-			
+	def uHost(self, a, ub):
+		self.s.send("USERHOST %s\r\n" % a)
+		global ubd
+		ubd=ub
+		
+	def ReturnUserHost(self):
+		HostName=self.args[3]
+		HostName=HostName.split("~")[1]
+		self.cmdBan(HostName, ubd)
