@@ -5,6 +5,7 @@ import string
 import IRCLISTS
 import cmds
 import parse
+import config
 
 class OpCommands(object):
 	def __init__(self, Nick, Location, TotalString, CMD, line, args, s, iSend):
