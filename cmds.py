@@ -4,6 +4,7 @@ import time
 import string
 import IRCLISTS
 import socket
+import config
 
 class Commands(object):
 	def __init__(self, Nick, Location, TotalString, CMD, line, args, s, iSend):
@@ -57,3 +58,14 @@ class Commands(object):
 			LeetSpeekText=LeetSpeekText.replace("s","5")
 			LeetSpeekText=LeetSpeekText.replace("t","7")
 			self.iSend(LeetSpeekText)
+	def Action(self):
+		if self.Nick in config.OpList:
+			if len(self.args)>=5:
+				if "|" not in self.args:
+					a=" ".join(self.args[3:len(self.args)-1])[2:]
+					self.s.send("PRIVMSG %s :\x01ACTION %ss %s\x01\r\n" % (self.Location, a, self.args[len(self.args)-1]))
+				else:
+					wt=self.args.index("|")
+					a=" ".join(self.args[3:wt-1])[2:]
+					wth=" ".join(self.args[wt+1:])
+					self.s.send("PRIVMSG %s :\x01ACTION %ss %s (with %s)\x01\r\n" % (self.Location, a, self.args[wt-1], wth))

@@ -48,6 +48,7 @@ class Parse(object):
 			elif self.CMD=="+ud":self.web.UD()
 			elif self.CMD=="+dict":self.web.Dict()
 			if "=+~" in self.args[3]:self.op_cmds.ReturnUserHost()
+			if self.CMD[0]=="~":self.mod_cmds.Action()
 			
 	#iSend function	
 	def iSend(self, msg):

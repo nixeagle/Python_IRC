@@ -2,8 +2,9 @@
 import socket
 import time
 import string
-import IRCLISTS
+import config
 import socket
+import config
 
 class Chan_Commands(object):
 	def __init__(self, Nick, Location, TotalString, CMD, line, args, s, iSend):
@@ -21,43 +22,42 @@ class Chan_Commands(object):
 			self.Location=self.Nick
 		self.iSend=iSend
 	def Up(self):
-		if len(self.args)==5:
-			if self.Nick == "Cam":
-				self.cmdChanMode(self.args[4], "+o")
-		if len(self.args)==4:
-			if self.Nick in IRCLISTS.OpList:
+		if self.Nick in config.OpList:
+			if len(self.args)==5:
+					self.cmdChanMode(self.args[4], "+o")
+			if len(self.args)==4:
 				self.cmdChanMode(self.Nick, "+o")
 	def Down(self):
-		if len(self.args)==5:
-			if self.Nick == "Cam":
+		if self.Nick in config.OpList:
+			if len(self.args)==5:	
 				self.cmdChanMode(self.args[4], "-o")
 		if len(self.args)==4:
 			self.cmdChanMode(self.Nick, "-o")
 	def	cmdChanMode(self, User, Mode):
 		self.s.send("MODE %s %s %s%s" % (self.Location, Mode, User, self.rn))
 	def Voice(self):
-		if self.Nick in IRCLISTS.OpList:
+		if self.Nick in config.OpList:
 			if len(self.args)==5:
 				self.cmdChanMode(self.args[4], "+v")
 			if len(self.args)==4:
 				self.cmdChanMode(self.Nick, "+v")
 	def DeVoice(self):
 		if len(self.args)==5:
-			if self.Nick in IRCLISTS.OpList:
+			if self.Nick in config.OpList:
 				self.cmdChanMode(self.args[4], "-o")
 		if len(self.args)==4:
 			self.cmdChanMode(self.Nick, "-v")
 	def ChannelJP(self, jp):
 		if jp=="join":
 			if len(self.args)==5:
-				if self.Nick in IRCLISTS.OpList:
+				if self.Nick in config.OpList:
 					self.s.send("JOIN :%s%s" % (self.args[4], self.rn))
 		elif jp=="part":
 			if len(self.args)==5:
-				if self.Nick in IRCLISTS.OpList:
+				if self.Nick in config.OpList:
 					self.s.send("PART :%s%s" % (self.args[4], self.rn))
 			elif len(self.args)==4:
-				if self.Nick in IRCLISTS.OpList:
+				if self.Nick in config.OpList:
 					self.s.send("PART :%s%s" % (self.Location, self.rn))
 		
 		

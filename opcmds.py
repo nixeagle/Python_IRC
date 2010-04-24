@@ -2,7 +2,7 @@
 import socket
 import time
 import string
-import IRCLISTS
+import config
 import cmds
 import parse
 import config
@@ -27,12 +27,12 @@ class OpCommands(object):
 		if "#" not in self.Location:
 			if len(self.args)==5:
 				if self.args[4].lower()==LoginPassword:
-					if self.Nick in IRCLISTS.OpList:
+					if self.Nick in config.OpList:
 						self.iSend("Error, you are already in the op list")
 					else:
 						self.iSend("Authorized. I added you to my OpList")
 						self.iSend("You can now use +up, +down, +voice and +devoice")
-						IRCLISTS.OpList.append(self.Nick)
+						config.OpList.append(self.Nick)
 				else:self.iSend("Incorrect Password")
 			else:self.iSend(self.LengthError)
 		else:self.iSend("Please use this command in PM")
@@ -46,7 +46,7 @@ class OpCommands(object):
 	def Ban(self, su):
 		global BanLocation
 		BanLocation=self.Location
-		if self.Nick in IRCLISTS.OpList:
+		if self.Nick in config.OpList:
 			if su=="ban":
 				if len(self.args)>5:
 					self.uHost(self.args[4], "+b")
@@ -56,13 +56,13 @@ class OpCommands(object):
 				if len(self.args)==5:
 					self.uHost(self.args[4], "-b")
 	def Kick(self):
-		if len(self.args)>5:
-			if self.Nick in IRCLISTS.OpList:
+		if self.Nick in config.OpList:
+			if len(self.args)>5:
 				self.cmdKick(self.args[4], " ".join(self.args[5:]))
-		else:
-			if self.Nick in IRCLISTS.OpList:
+			elif len(self.args)==5:
 				KickMSG="You have been kicked from %s." % self.Location
 				self.cmdKick(self.args[4], KickMSG)
+				
 	def uHost(self, a, ub):
 		self.s.send("USERHOST %s\r\n" % a)
 		global ubd
