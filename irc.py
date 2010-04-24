@@ -5,7 +5,6 @@ import string
 import parse
 import cmds
 import opcmds
-import IRCLISTS
 import ccmds
 import spanish
 import config

@@ -2,7 +2,6 @@
 import socket
 import time
 import string
-import IRCLISTS
 import socket
 
 class Spanish(object):

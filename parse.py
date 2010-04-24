@@ -4,7 +4,6 @@ import time
 import string
 import cmds
 import opcmds
-import IRCLISTS
 import ccmds
 import spanish
 import web
