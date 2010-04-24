@@ -22,14 +22,15 @@ class OpCommands(object):
 			self.Location=self.Nick
 		self.iSend=iSend
 	def Login(self):
-		self.LoginPassword="erc333"
+		LoginPassword=config.OpPassword
 		if "#" not in self.Location:
 			if len(self.args)==5:
-				if self.args[4].lower()==self.LoginPassword:
+				if self.args[4].lower()==LoginPassword:
 					if self.Nick in IRCLISTS.OpList:
 						self.iSend("Error, you are already in the op list")
 					else:
 						self.iSend("Authorized. I added you to my OpList")
+						self.iSend("You can now use +up, +down, +voice and +devoice")
 						IRCLISTS.OpList.append(self.Nick)
 				else:self.iSend("Incorrect Password")
 			else:self.iSend(self.LengthError)
