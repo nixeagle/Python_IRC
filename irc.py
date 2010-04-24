@@ -47,16 +47,14 @@ class IRCConnect(object):
 			Parse=parse.Parse(self.Nick, self.Location, self.TotalString, self.CMD, self.line, self.args, self.s)
 			Parse.Parse()
 			if self.Nick=="Cam":
-				if self.CMD=="+reload":
+				if self.CMD==".reload":
 					reload(parse)
 					reload(cmds)
 					reload(opcmds)
-					reload(IRCLISTS)
 					reload(ccmds)
 					reload(spanish)
-					reload(config)
 					reload(web)
-					print "Reloaded all"
+					print "Reloaded all parse/cmds/opcmds/ccmds/spanish/web"
 					
 
 
