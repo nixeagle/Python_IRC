@@ -8,22 +8,25 @@ import opcmds
 import IRCLISTS
 import ccmds
 import spanish
+import config
+import web
 
 class IRCConnect(object):
-	def __init__(self, HOST, PORT, NICK, IDENT, REALNAME, JoinChannel, readbuffer, s):
+	def __init__(self, HOST, PORT, NICK, IDENT, REALNAME, readbuffer, s):
 		self.HOST=HOST
 		self.PORT=PORT
 		self.NICK=NICK
 		self.IDENT=IDENT
 		self.REALNAME=REALNAME
-		self.JoinChannel=JoinChannel
+		self.JoinChannel=DefaultChannel
 		self.s=s
 		self.readbuffer=readbuffer
+		self.BotPassword=BOTPASSWORD
 	def Start(self):
 		self.s.connect((self.HOST, self.PORT))
 		self.s.send("NICK %s\r\n" % self.NICK)
 		self.s.send("USER %s %s bla :%s\r\n" % (self.IDENT, self.HOST, self.REALNAME))
-		self.s.send("PRIVMSG NICKSERV :IDENTIFY PASSWORD\r\n")
+		self.s.send("PRIVMSG NICKSERV :IDENTIFY %s\r\n" % self.BotPassword)
 		time.sleep(2)
 		self.s.send("JOIN %s\r\n" % (self.JoinChannel))
 	def ReadBuffer(self):
@@ -44,28 +47,33 @@ class IRCConnect(object):
 			Parse=parse.Parse(self.Nick, self.Location, self.TotalString, self.CMD, self.line, self.args, self.s)
 			Parse.Parse()
 			if self.Nick=="Cam":
-				if self.CMD=="!r":
+				if self.CMD=="+reload":
 					reload(parse)
 					reload(cmds)
 					reload(opcmds)
 					reload(IRCLISTS)
 					reload(ccmds)
 					reload(spanish)
+					reload(config)
+					reload(web)
+					print "Reloaded all"
+					
 
 
 
-HOST="irc.freenode.net"
-PORT=6667
-NICK="Cam`"
-IDENT="CamBot"
-REALNAME="Owned by Cam"
 PM="PRIVMSG"
-JoinChannel="##bottest[cam]"
 readbuffer=""
 s=socket.socket()
+HOST=config.HOST
+NICK=config.NICK
+PORT=config.PORT
+IDENT=config.IDENT
+REALNAME=config.REALNAME
+DefaultChannel=config.DefaultChannel
+BOTPASSWORD=config.Bot_Password
 
 
-Connect_IRC=IRCConnect(HOST, PORT, NICK, IDENT, REALNAME, JoinChannel, readbuffer, s)
+Connect_IRC=IRCConnect(HOST, PORT, NICK, IDENT, REALNAME, readbuffer, s)
 Connect_IRC.Start()
 while 1:
 	Connect_IRC.ReadBuffer()

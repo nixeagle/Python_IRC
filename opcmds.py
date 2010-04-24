@@ -61,11 +61,12 @@ class OpCommands(object):
 	def UserHost(self):
 		if len(self.args)==5:
 			self.UserHostWho=self.args[4]
-			self.UserHostLocation=self.Location
+			global UserHostLocation
+			UserHostLocation=self.Location
 			self.s.send("USERHOST %s\r\n" % self.UserHostWho)
 	def UserHost2(self):
 			try:
-				self.s.send("PRIVMSG %s :%s\r\n" % (self.UserHostLocation, self.args[3]))
+				self.s.send("PRIVMSG %s :%s\r\n" % (UserHostLocation, self.args[3]))
 				print self.args[3].split("@")[1]
 			except AttributeError:
 				print "Attribute ERROR"
