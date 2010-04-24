@@ -1,1 +1,47 @@
-Re-writing...
+Cam` is a BOT designed by Cam1337. 
+All source code can be found at http://github.com/Cam1337/Python_IRC . 
+This bot currently supports these commands:
+
+*All commands are lowercase, but can be typed in any case desired*
+i.e +kIcK tHiSgUySnIcK will run the "kick" command and kick "thisguysnick".
+
+Login - A command that will only work if it is PM'd to the bot, usage, +login <password>. If the user enters the correct password (edited in config.py), they will be added to the OpList in IRCLISTS and will be given access to "+up", "+down", "+voice", "+devoice". If the suply the incorrect password, they will be alerted, and no change will occur. 
+
+List - This command just lists the current OpList (found in IRCLISTS), ensuring that someone was added if they logged in correctly, currently mostly a debug function. 
+
+Lookup - A command to lookup an IP and return a hostname, or lookup a hostname to return an IP. Usage: +lookup www.google.com .
+
+Up, Down - If the user is in the OpList they can use "+up" and "+down" to be Opped or Deopped. I will re-work it so that they can also use +up <nick> and +down <nick>, currently only a command usable by me.
+
+Voice, Devoice - Similar to Up and Down, but voice, +v and -v.
+
+Kick - A command that will kick the user with a specified message, if no message is suplied, it will kick with "You have been kicked from <current channel>". Usage - +kick <nick> <my msg> / +kick <nick>
+
+Conj - A little project that will likely get it's data from the web, for now, it conjugates all spanish present verbs that end in "er","ar","ir" in the correct form. Usage - +conj hablar spanish present / MUST have the "spanish present" on the end.
+
+Join - Bot will join the specified channel. Op command only.
+
+Part - The same as above, but the bot will part the channel. If +part is typed, the bot will part the channel that that is written in. 
+
+Ban - A command that will ban the host of a nick. If no kick message is specified, a generic "you have been kicked from <current channel>" message will be sent.
+
+Unban - To unban a Ban *from the bot*, it will only work on bans that the bot did, IRC clients often use different ban methods.
+
+Ud - Short for Urban Dictionary, this is a web parsing command that will try and return a definition for the supplied word. Error message for word not found.
+
+Dict - Short for Dictionarym this is a web parsing command that will return a definition for a SINGLE supplied word. Error messages for too many words and word not found.
+
+For now, that is it. Email questions or suggestion to admin@wcamw.com or leave a comment here: http://github.com/Cam1337/Python_IRC/
+
+
+config.py example:
+
+#! /usr/bin/env python
+HOST="irc.freenode.net"
+PORT=6667
+NICK="<your nick here>"
+IDENT="Cam-Bot"
+DefaultChannel="<your channel>"
+Bot_Password="<your bots password>" # Optional, for NickServ authorization. 
+REALNAME="Written by Cam"
+OpPassword="<your operator password>"
