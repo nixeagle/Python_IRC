@@ -120,16 +120,34 @@ class Commands(object):
 				pass
 			else:self.iSend("Sorry! This only works for Cam")
 		else:
-			if self.args[4]=="like":
-				GoodSongs.append(ForStorage)
-				self.iSend("Cam, the current song has been added to your favorite songs list")
-			elif self.args[4]=="dislike":
-				BadSongs.append(ForStorage)
-				self.iSend("Cam, the current song has been added to your disliked songs list")
-			elif self.args[4]=="good":
-				self.iSend("".join(GoodSongs))
-			elif self.args[4]=="bad":
-				self.iSend("".join(BadSongs))
-
+			if self.Nick=="Cam":
+				if self.args[4]=="like":
+					GoodSongs.append(ForStorage)
+					self.iSend("Cam, the current song has been added to your favorite songs list")
+				elif self.args[4]=="dislike":
+					BadSongs.append(ForStorage)
+					self.iSend("Cam, the current song has been added to your disliked songs list")
+				elif self.args[4]=="good":
+					self.iSend("".join(GoodSongs))
+				elif self.args[4]=="bad":
+					self.iSend("".join(BadSongs))
+	
+				
+	def Regex(self):
+		if len(self.args)>=5:
+			try:
+				i=self.args.index("|")
+				try:
+					Regex=" ".join(self.args[4:i])
+					Match=" ".join(self.args[i+1:])
+					m=re.search(Regex, Match)
+					Total="Match: %s" % m.group(0)
+					self.iSend(Total)
+				except AttributeError:
+					self.iSend("No match")
+			except:
+				self.iSend("%s, you idiot, '.regex code | match text'"%self.Nick)
+			
+			
 			
 			
