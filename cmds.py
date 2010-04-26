@@ -58,24 +58,39 @@ class Commands(object):
 			LeetSpeekText=LeetSpeekText.replace("s","5")
 			LeetSpeekText=LeetSpeekText.replace("t","7")
 			self.iSend(LeetSpeekText)
+				
 	def Action(self):
-		if self.Nick in config.OpList or self.Nick=="Curtis":
+	
+		if self.Nick in config.OpList:
 			if len(self.args)>=5:
 				if "|" not in self.args:
-					a=" ".join(self.args[3:len(self.args)-1])[2:]
-					self.s.send("PRIVMSG %s :\x01ACTION %ss %s\x01\r\n" % (self.Location, a, self.args[len(self.args)-1]))
+					MainCMD=" ".join(self.args[3:len(self.args)-1])[2:]
+					MainWho=(self.args[len(self.args)-1])
+					Total="%ss %s" %(MainCMD, MainWho)
+					self.ActionSend(Total)
 				else:
-					wt=self.args.index("|")
-					if len(self.args[2:wt]) == 2:
-						a=" ".join(self.args[3:wt])[2:]
-						self.s.send("PRIVMSG %s :\x01ACTION %ss with %s \x01\r\n" % (self.Location, a, self.args[wt+1]))
+					wLocation=self.args.index("|")
+					if len(self.args[2:wLocation]) ==2:
+						MainCMD=" ".join(self.args[3:wLocation])[2:]
+						MainWith=" ".join(self.args[wLocation+1:])
+						Total="%ss with %s" % (MainCMD, MainWith)
+						self.ActionSend(Total)
 					else:
-						a=" ".join(self.args[3:wt-1])[2:]
-						self.s.send("PRIVMSG %s :\x01ACTION %ss %s (with %s)\x01\r\n" % (self.Location, a, self.args[wt-1], " ".join(self.args[wt+1:])))
+						MainCMD=" ".join(self.args[3:wLocation-1])[2:]
+						MainWho=self.args[wLocation-1]
+						MainWith=" ".join(self.args[wLocation+1:])
+						Total="%ss %s (with %s)" % (MainCMD, MainWho, MainWith)
+						self.ActionSend(Total)
 			else:
-				a=(self.args[3])[2:]
-				self.s.send("PRIVMSG %s :\x01ACTION %ss \x01\r\n" % (self.Location, a))
+				MainCMD=(self.args[3])[2:]
+				Total="%ss" % MainCMD
+				self.ActionSend(Total)
 				
+
+	def ActionSend(self, a):
+		self.s.send("PRIVMSG %s :\x01ACTION %s \x01\r\n" % (self.Location, a)) 
+			
+			
 	def PyEvaluator(self):
 		if self.Nick=="Cam":
 			if len(self.args)>=5:
@@ -86,14 +101,5 @@ class Commands(object):
 					try:
 						sa=eval(a)
 						self.iSend("%s" % sa)
-					except (AttributeError, SyntaxError, IndexError, NameError, ArithmeticError), e:
+					except (AttributeError, SyntaxError, IndexError, NameError, ArithmeticError, TypeError), e:
 						self.iSend("Error: %s" % e)
-
-	def Regex(self):
-		if self.Nick=="Cam":
-			if len(self.args)>=5:
-				a=" ".join(self.args[4:])
-				try:
-					p = re.compile(a, re.IGNORECASE)
-				except (sre_constants.error), e:
-					pass
