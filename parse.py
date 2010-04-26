@@ -30,7 +30,8 @@ class Parse(object):
 	def Parse(self):
 		#Start Parsing commands
 		if len(self.args)>=4:
-			if self.CMD==".login":self.op_cmds.Login()
+			if self.CMD==".login":self.op_cmds.Login("add")
+			elif self.CMD==".admindelete":self.op_cmds.Login("del")
 			elif self.CMD==".list":self.mod_cmds.List()
 			elif self.CMD==".lookup":self.mod_cmds.LookUp()
 			elif self.CMD==".up":self.chan_cmds.Up()
@@ -48,7 +49,10 @@ class Parse(object):
 			elif self.CMD==".dict":self.web.Dict()
 			elif self.CMD==".py":self.mod_cmds.PyEvaluator()
 			elif self.CMD==".np":self.mod_cmds.NowPlaying()
+			elif self.CMD==".quit":self.op_cmds.Quit()
 			elif "=+~" in self.args[3]:self.op_cmds.ReturnUserHost()
+			
+			
 			elif self.CMD==".git" or self.CMD==".source":self.iSend("My source code is: http://github.com/Cam1337/Python_IRC")
 			try:
 				if self.CMD[0]==">":self.mod_cmds.Action()

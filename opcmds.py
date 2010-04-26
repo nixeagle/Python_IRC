@@ -6,6 +6,8 @@ import config
 import cmds
 import parse
 import config
+import commands
+import sys
 
 class OpCommands(object):
 	def __init__(self, Nick, Location, TotalString, CMD, line, args, s, iSend):
@@ -22,18 +24,26 @@ class OpCommands(object):
 		if self.Location=="Cam`":
 			self.Location=self.Nick
 		self.iSend=iSend
-	def Login(self):
+	def Login(self, a ):
 		LoginPassword=config.OpPassword
 		if "#" not in self.Location:
 			if len(self.args)==5:
-				if self.args[4].lower()==LoginPassword:
-					if self.Nick in config.OpList:
-						self.iSend("Error, you are already in the op list")
-					else:
-						self.iSend("Authorized. I added you to my OpList")
-						self.iSend("You can now use +up, +down, +voice and +devoice")
-						config.OpList.append(self.Nick)
-				else:self.iSend("Incorrect Password")
+				if a=="add":
+					if self.args[4].lower()==LoginPassword:
+						if self.Nick in config.OpList:
+							self.iSend("Error, you are already in the op list")
+						else:
+							self.iSend("Authorized. I added you to my OpList")
+							self.iSend("You can now use +up, +down, +voice and +devoice")
+							config.OpList.append(self.Nick)
+				if a=="del":
+					if self.Nick=="Cam":
+						try:
+							config.OpList.remove(self.args[4])
+							self.iSend("I removed %s" % self.args[4])
+						except ValueError:
+							self.iSend("%s doesn't exist" % self.args[4])
+					else:self.iSend("Incorrect Password")
 			else:self.iSend(self.LengthError)
 		else:self.iSend("Please use this command in PM")
 	def	cmdChanMode(self, User, Mode):
@@ -50,8 +60,13 @@ class OpCommands(object):
 			if su=="ban":
 				if len(self.args)>5:
 					self.uHost(self.args[4], "+b")
+					KickMessage=" ".join(self.args[4:])
+					self.cmdKick(self.args[4], KickMessage)
 				if len(self.args)==5:
 					self.uHost(self.args[4], "+b")
+					KickMessage="You have been banned from %s" % self.Location
+					self.cmdKick(self.args[4], KickMessage)
+
 			if su=="unban":
 				if len(self.args)==5:
 					self.uHost(self.args[4], "-b")
@@ -72,3 +87,9 @@ class OpCommands(object):
 		HostName=self.args[3]
 		HostName=HostName.split("~")[1]
 		self.cmdBan(HostName, ubd)
+	
+	def Quit(self):
+		if self.Nick in config.AdminList:
+			self.iSend("Quiting....")
+			self.s.close()
+			sys.exit()
