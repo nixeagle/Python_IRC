@@ -47,6 +47,7 @@ class Parse(object):
 			elif self.CMD==".ud":self.web.UD()
 			elif self.CMD==".dict":self.web.Dict()
 			elif self.CMD==".py":self.mod_cmds.PyEvaluator()
+			elif self.CMD==".np":self.mod_cmds.NowPlaying()
 			elif "=+~" in self.args[3]:self.op_cmds.ReturnUserHost()
 			elif self.CMD==".git" or self.CMD==".source":self.iSend("My source code is: http://github.com/Cam1337/Python_IRC")
 			try:

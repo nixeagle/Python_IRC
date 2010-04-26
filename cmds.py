@@ -5,6 +5,10 @@ import string
 import socket
 import config
 import re
+import commands
+
+GoodSongs=[]
+BadSongs=[]
 
 class Commands(object):
 	def __init__(self, Nick, Location, TotalString, CMD, line, args, s, iSend):
@@ -103,3 +107,29 @@ class Commands(object):
 						self.iSend("%s" % sa)
 					except (AttributeError, SyntaxError, IndexError, NameError, ArithmeticError, TypeError), e:
 						self.iSend("Error: %s" % e)
+
+
+		
+	def NowPlaying(self):
+		CurrentTrack=commands.getoutput("osascript -e 'tell application \"iTunes\" to name of current track as string'")
+		CurrentArtist=commands.getoutput("osascript -e 'tell application \"iTunes\" to artist of current track as string'")
+		ForStorage="[%s]by[%s]" % (CurrentTrack.strip(), CurrentArtist.strip())
+		if len(self.args)==4:
+			if self.Nick == "Cam":
+				self.iSend("Cam, you are playing \"%s\" by \"%s\"" % (CurrentTrack.strip(), CurrentArtist.strip()))
+				pass
+			else:self.iSend("Sorry! This only works for Cam")
+		else:
+			if self.args[4]=="like":
+				GoodSongs.append(ForStorage)
+				self.iSend("Cam, the current song has been added to your favorite songs list")
+			elif self.args[4]=="dislike":
+				BadSongs.append(ForStorage)
+				self.iSend("Cam, the current song has been added to your disliked songs list")
+			elif self.args[4]=="good":
+				self.iSend("".join(GoodSongs))
+			elif self.args[4]=="bad":
+				self.iSend("".join(BadSongs))
+
+			
+			
